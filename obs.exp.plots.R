@@ -7,7 +7,7 @@
 #(not using this now but keeping it here just in case need it later)
 #
 #
-#______________________________________________________________
+#__ORIGINAL function to plot the lm with the coefficients:____________________________________________________________
 ggplotRegression <- function (fit) {
   
   require(ggplot2)
@@ -21,14 +21,59 @@ ggplotRegression <- function (fit) {
                        " P =",signif(summary(fit)$coef[2,4], 5)))
 }
 
-ggplotRegression(lm(Base.Max~Observed, data=mg.lsk.oe))
+ggplotRegression(lm(Base.Lsk~Obs.Lsk, data=m.oe))
 ###########___________________________________________
 #
 #
 #
+#MODIFIED:
+#10/21 bc of time limit just changing this next chunk of code for each plot and exporting. 
+#need to edit original function so that it will pull in a predefined "axis title" var to populate.
+#______________________________________________________________
+ggplotRegression <- function (fit) {
+  
+  require(ggplot2)
+  
+  ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) + 
+    geom_point() +
+    stat_smooth(method = "lm", col = "blue") +
+    theme_bw()+
+    theme(axis.text.x=element_text(size=12, vjust=-0.35))+
+    theme(axis.text.y=element_text(size=12, vjust=-0.35))+
+    theme(axis.title=element_text(size=14))+
+    labs(title = paste("Adj R2 = ",signif(summary(fit)$adj.r.squared, 3),
+                       "Intercept =",signif(fit$coef[[1]],3 ),
+                       " Slope =",signif(fit$coef[[2]], 3),
+                       " P =",signif(summary(fit)$coef[2,4], 3)),
+         x="Observed Lsk Population (10^6 sheep units)", y="Predicted Lsk Population (10^6 sheep units)")
+}
+
+ggplotRegression(lm(Base.Lsk~Obs.Lsk, data=m.oe))
+###########___________________________________________
+setwd("./plots")
+ggsave(moe.l, file="MG lsk ob.exp.png", height=5, width=5, dpi=600)
+
+
+
+
+
+
+
+
+#ORIGINAL PLOTTING CODE :
+
+library(ggplot2)
 
 #Sukhbaatar, MONGOLIA
-moe.l<- ggplot(mg.lsk.oe, aes(Observed, Base.EOY))+
+setwd("./data")
+m.oe<- read.csv("mg.obsexp.csv", header=TRUE)
+
+
+
+
+
+
+moe.l<- ggplot(m.oe, aes(Obs.Lsk, Base.Lsk))+
   geom_point()+
   stat_smooth(method="lm")+
   theme_bw()+
@@ -55,7 +100,7 @@ ggsave(moe.p, file="MG pop ob.exp.png", height=5, width=5, dpi=600)
 
 #XILINGOL IMAR #
 #pull the observed out:
-setwd("U:/GitHub/Mongolia/data/Original runs")
+setwd("./data")
 liv<- read.csv("livestock.csv", header=TRUE, na.string="NA")
 liv.oe<- liv[1:18,] #pulls just the years w observed data
 tbl_df(liv.oe)
