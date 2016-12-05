@@ -36,7 +36,11 @@ x6S4<-Xgl_All%>%
   filter(Scenario=="Scen4")
 #Combine back together:
 xFig<- rbind(xBS3, x6S4)
-
+xFig$Scenario[xFig$Scenario=="Scen1"]<-"S1: Increased Precip"
+xFig$Scenario[xFig$Scenario=="Scen2"]<-"S2: No Grass Protection"
+xFig$Scenario[xFig$Scenario=="Scen3"]<- "S3: Cropland Expansion"
+xFig$Scenario[xFig$Scenario=="Scen4"]<-"S4: No Policy"
+                                                
 
 ##
 #~~~~~~~~~~~~~~XILINGOL~~~~~~~~~~~
@@ -52,14 +56,22 @@ xg<- ggplot(xFig, aes(x=Year, y=GrassArea, group=Scenario, shape=Scenario))+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17,4))+
   theme_bw()+
-  theme(axis.text.x=element_text(size=11, angle=90))+
-  theme(axis.text.y=element_text(size=11, vjust=-0.35))+
-  theme(axis.text=element_text(size=16),axis.title=element_text(size=16))+
+  theme(axis.text.x=element_text(size=10, 
+                                 angle=90))+
+  theme(axis.text.y=element_text(size=10, 
+                                 vjust=-0.35))+
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=12))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
-  #theme(legend.position="none")+
-  theme(legend.text=element_text(labels=c("Base Model", "Increased Precip", "No Grass Policy", "No Crop Policy", "Worst Case")))+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Grassland area (ha)")
+  theme(legend.position="none")+
+  #theme(legend.text=element_text(labels=c("Base Model", "Increased Precip", "No Grass Policy", "No Crop Policy", "Worst Case")))+
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())+
+  labs(x="Year", 
+       y="Grassland area (ha)", 
+       title="a)")+
+  theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
+                                face='bold'))   
 xg
 
 xg+geom_line(data=xS46)+geom_point()
@@ -98,13 +110,13 @@ xc<- ggplot(xFig, aes(x=Year, y=CropArea, group=Scenario, shape=Scenario))+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17,4))+
   theme_bw()+
-  theme(axis.text.x=element_text(size=11, angle=90))+
-  theme(axis.text.y=element_text(size=11, vjust=-0.35))+
-  theme(axis.text=element_text(size=16),axis.title=element_text(size=16))+
+  theme(axis.text.x=element_text(size=10, angle=90))+
+  theme(axis.text.y=element_text(size=10, vjust=-0.35))+
+  theme(axis.text=element_text(size=12),axis.title=element_text(size=12))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
-  #theme(legend.position="none")+
+  theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Cropland area (ha)")
+  labs(x="Year", y="Cropland area (ha)", title="b)")
 #Crop color
 xc.col<-ggplot(data=xFig, aes(x=Year, y=CropArea, group=Scenario,  color=Scenario)) +
   #geom_jitter()+
@@ -141,13 +153,13 @@ xl<- ggplot(xFig, aes(x=Year, y=LskPop, group=Scenario, shape=Scenario))+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17,4))+
   theme_bw()+
-  theme(axis.text.x=element_text(size=11, angle=90))+
-  theme(axis.text.y=element_text(size=11, vjust=-0.35))+
-  theme(axis.text=element_text(size=16),axis.title=element_text(size=16))+
+  theme(axis.text.x=element_text(size=10, angle=90))+
+  theme(axis.text.y=element_text(size=10, vjust=-0.35))+
+  theme(axis.text=element_text(size=12),axis.title=element_text(size=12))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
-  #theme(legend.position="none")+
+  theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Livestock Population EOY (s.u.)")
+  labs(x="Year", y="Livestock Population EOY (s.u.)", title="c)")
 
 #Lsk Color:
 xl.col<-ggplot(data=xFig, aes(x=Year, y=LskPop, group=Scenario, shape=Scenario, color=Scenario)) +
@@ -183,13 +195,13 @@ xr<- ggplot(xFig, aes(x=Year, y=Biomass, group=Scenario, shape=Scenario))+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17,4))+
   theme_bw()+
-  theme(axis.text.x=element_text(size=11, angle=90))+
-  theme(axis.text.y=element_text(size=11, vjust=-0.35))+
-  theme(axis.text=element_text(size=16),axis.title=element_text(size=16))+
+  theme(axis.text.x=element_text(size=10, angle=90))+
+  theme(axis.text.y=element_text(size=10, vjust=-0.35))+
+  theme(axis.text=element_text(size=12),axis.title=element_text(size=12))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
-  #theme(legend.position="none")+
+  theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="(Remaining Biomass EOY (kg/ha)")
+  labs(x="Year", y="(Remaining Biomass EOY (kg/ha)", title="d)")
 
 #Biomass Color:
 xb.col<-ggplot(data=xFig, aes(x=Year, y=Biomass, group=Scenario, shape=Scenario, color=Scenario)) +
@@ -245,6 +257,14 @@ ggsave(xl.col.base, file="Xg_base_grass.png", height=5, width=8, dpi=600)
 ggsave(xb.col.base, file="Xg_base_grass.png", height=5, width=8, dpi=600)
 
 
+#MULITPLOT, USING CODE for function from new.obs.exp.R
+
+Fig4combo<- grid_arrange_shared_legend(xg, xc, xl, xr, nrow=4, ncol=1)
+
+#fig4<- arrangeGrob(xg, xc, xl, xr, ncol=1)
+
+ggsave(Fig4combo, file="./plots/Fig4combo.png", height=8, width=10, dpi=300)
+
 ###################
 #   UF plots 
 ###################
@@ -278,8 +298,8 @@ ufg<- ggplot(data=XglG, aes(x=Scenario, y=GrassArea, group=UF, color=Scenario))+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
   theme(axis.text.x=element_text(size=22),
         axis.title.x=element_blank())+  #axis.text=element_text(size=)
-  theme(axis.text.y=element_text(size=11, vjust=-0.35),
-        axis.title.y=element_text(face="bold", size=16))+
+  theme(axis.text.y=element_text(size=10, vjust=-0.35),
+        axis.title.y=element_text(face="bold", size=12))+
   labs(x="SCENARIOS", y="Grass Area (ha)")+
   theme(legend.position="none")
 ufg  
@@ -355,6 +375,12 @@ ggsave(ufb, file="Xg_ufb.png", height=5, width=6,dpi=600)
 #don't have to subset bc using 0.65 for all
 ####################################################
 
+Sukh_All$Scenario[Sukh_All$Scenario=="Scen1"]<-"S1: Industrialization & Urbanization"
+Sukh_All$Scenario[Sukh_All$Scenario=="Scen2"]<-"S2: Rural Infrastructure Investment"
+Sukh_All$Scenario[Sukh_All$Scenario=="Scen3"]<- "S3: Privatization of Resources"
+
+
+
 #GRASSLAND AREA
 
 sg<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea, group=Scenario, shape=Scenario))+
@@ -368,7 +394,7 @@ sg<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea, gr
   scale_x_discrete(breaks=seq(1990,2050,5))+
   #theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Grassland area (ha)")
+  labs(x="Year", y="Grassland area (ha)", title="a)")
 sg
 
 #Sukh Grass Color:
@@ -412,7 +438,7 @@ sl<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=LskPop, group
   scale_x_discrete(breaks=seq(1990,2050,5))+
   #theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Livestock Population EOY (s.u.)")
+  labs(x="Year", y="Livestock Population EOY (s.u.)", title="b)")
 sl
 #Lsk Color:
 sl.col<-ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=LskPop, group=Scenario, shape=Scenario, color=Scenario)) +
@@ -454,7 +480,7 @@ sr<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=Biomass, grou
   scale_x_discrete(breaks=seq(1990,2050,5))+
   #theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="(Remaining Biomass EOY (kg/ha)")
+  labs(x="Year", y="(Remaining Biomass EOY (kg/ha)", title="c)")
 sr
 
 #Biomass color
@@ -493,6 +519,14 @@ ggsave(sg, file="Suk_grass.png", height=5, width=8,dpi=600)
 ggsave(sb.col, file="Suk_rmbColor.png", height=5, width=8,dpi=600)
 ggsave(sl.col, file="Suk_lskColor.png", height=5, width=8,dpi=600)
 ggsave(sg.col, file="Suk_grassColor.png", height=5, width=8,dpi=600)
+
+
+
+Fig5combo<- grid_arrange_shared_legend(sg, sl, sr, ncol=2)  #try inserting a blank box
+
+ggsave(Fig5combo, file="./plots/Fig5combo.png", height=8, width=5, dpi=300)
+
+
 
 #############
 #  UF plots #     this is to represnt the difference in the endpoints of each scenario under diff settings for UF=low/med/hi

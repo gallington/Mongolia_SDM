@@ -1,4 +1,11 @@
-setwd("../data")
+#12/5 added new code to label subplots and create multiplot and export at high res
+
+library(gridExtra)
+library(ggplot2)
+
+
+
+#setwd("../data")
 m.oe<- read.csv("mg.obsexp.csv", header=TRUE)
 
 mtidy<-m.oe %>%gather("Source", "Population", 2:5, na.rm=TRUE)
@@ -9,17 +16,21 @@ mloe<-
   filter(msep, Type=="Lsk")%>%
   ggplot(aes(Year, Population, group=OE))+
   geom_line(aes(linetype=OE), size=1)+      #Set line type by obs/exp
-  #geom_point()+
   expand_limits(y=0) +                      #Set y axis to start at 0
    scale_linetype_discrete(name="",
                       breaks=c("Base", "Obs"),
                       labels=c("Predicted", "Observed"))+
   theme(legend.title=element_blank())+       # to remove legend title
    #xlab("Year") + 
-  ylab("Livestock Population (su) *10^6") +
+  labs(y="Livestock Population (su) *10^6", title="d)" ) +
   theme_bw()+
-  #theme(legend.position=c(.9, .2))     #to put the legend inside the plot
-  theme(legend.position="none")         #to remove the legend
+  theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
+                                face='bold')) +
+  annotate("text", x=2010, y=0.5,
+           label="r^2=0.71\np<0.001",
+           size=4,)+
+  theme(legend.position="none")+                 #to remove the legend
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(mloe, file="../plots/m.lsk.oe.ts.png", height=3, width=3, dpi=300)
 
 mhoe<-
@@ -32,11 +43,15 @@ mhoe<-
                           breaks=c("Base", "Obs"),
                           labels=c("Predicted", "Observed"))+
   theme(legend.title=element_blank())+       # to remove legend title
-  #xlab("Year") + 
-  ylab("Human Population *10^3") +
+  labs(y="Human Population *10^3", title="c)") +
   theme_bw()+
-  #theme(legend.position=c(.9, .2))     
-  theme(legend.position="none")
+  theme(plot.title=element_text(hjust=0, 
+                                face='bold'))+
+  annotate("text", x=2010, y=47,
+           label="r^2=0.86 \np<0.001",
+           size=4)+
+  theme(legend.position="none")+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 ggsave(mhoe, file="../plots/m.pop.oe.ts.png", height=3, width=3, dpi=300)
 
@@ -48,10 +63,11 @@ x.oe<- read.csv("xgl.obsexp.csv", header=TRUE)
 xtidy<-x.oe %>%gather("Source", "Population", 2:5, na.rm=TRUE)
 xsep<- separate(xtidy, col=Source, into=c("OE", "Type")) 
 
+
 #Xilingol Livestock:
 xloe<-
   filter(xsep, Type=="Lsk")%>%
-  ggplot(aes(Year, Population, group=OE))+
+  ggplot(aes(Year, Population/10^6, group=OE))+
   geom_line(aes(linetype=OE), size=1)+      #Set line type by obs/exp
   #geom_point()+
   expand_limits(y=0) +                      #Set y axis to start at 0
@@ -60,27 +76,70 @@ xloe<-
                           labels=c("Predicted", "Observed"))+
   theme(legend.title=element_blank())+       # to remove legend title
   #xlab("Year") + 
-  ylab("Livestock Population (su) *10^6") +
+  labs(y="Livestock Population (su) *10^6", title="b)") +
   theme_bw()+
-  #theme(legend.position=c(.9, .2))     #to put the legend inside the plot
-  theme(legend.position="none")         #to remove the legend
+  theme(legend.position=c(.9, .2),                   #to put the legend inside the plot
+        plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
+                                face='bold')) +
+  annotate("text", x=2005, y=2,
+           label="r^2=0.76\np<0.001",
+           size=4)+
+  theme(legend.position="none")   +                  #to remove the legend
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
 ggsave(xloe, file="../plots/x.lsk.oe.ts.png", height=3, width=3, dpi=300)
 
 #Xilingol Human Pop:
 xhoe<-
   filter(xsep, Type=="Pop")%>%
-  ggplot(aes(Year, Population, group=OE))+
+  ggplot(aes(Year, Population/10^6, group=OE))+
   geom_line(aes(linetype=OE), size=1)+      #Set line type by obs/exp
-  #geom_point()+
-  expand_limits(y=c(0.8, 1.2)) +                      #Set y axis to start at 0
+  expand_limits(y=c(0.8, 1.2)) +                      #Set y axis to start at 0.8
   scale_linetype_discrete(name="",
                           breaks=c("Base", "Obs"),
                           labels=c("Predicted", "Observed"))+
   theme(legend.title=element_blank())+       # to remove legend title
-  #xlab("Year") + 
-  ylab("Human Population *10^6") +
+  labs(x= "Year", y= "Human Population *10^6", title="a)") +
   theme_bw()+
-  #theme(legend.position=c(.9, .2))     
-  theme(legend.position="none")
+  theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
+                                face='bold'))  +    
+  annotate("text", x=2010, y=0.85,
+           label="r^2=0.86\np<0.001",
+           size=4)+
+  theme(legend.position="none")+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 ggsave(xhoe, file="../plots/x.pop.oe.ts.png", height=3, width=3, dpi=300)
+
+grid.arrange(xhoe, xloe, mhoe, mloe, ncol=2)
+
+#to plot all together with teh legend on the bottom, 
+#use function code from: 
+#http://rpubs.com/sjackman/grid_arrange_shared_legend
+#
+library(ggplot2)
+library(gridExtra)
+library(grid)
+
+#function to combine plots and put legend at bottom:
+grid_arrange_shared_legend <- function(...) {
+  plots <- list(...)
+  g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+  grid.arrange(
+    do.call(arrangeGrob, lapply(plots, function(x)
+      x + theme(legend.position="none"))),
+    legend,
+    ncol = 1,
+    heights = unit.c(unit(1, "npc") - lheight, lheight))
+}
+#combine plots
+grid_arrange_shared_legend(xhoe, xloe, mhoe, mloe, ncol=2, nrow=2)
+#assign to object
+combo<- grid_arrange_shared_legend(xhoe, xloe, mhoe, mloe, ncol=2, nrow=2) #this won't save to ggsave
+#export
+ggsave(combo, file="./plots/combined_plot2.png", height=6, width=6, dpi=300)
+
+#this doesn't use the call to put legend at bottom
+#g<- arrangeGrob(xhoe, xloe, mhoe, mloe, ncol=2) 
