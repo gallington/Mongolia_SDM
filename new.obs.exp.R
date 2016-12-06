@@ -3,15 +3,21 @@
 library(gridExtra)
 library(ggplot2)
 
-
+#Plotting observed v predicted values.
 
 #setwd("../data")
+
+#this code has Mongolia first for some reason, don't get confused.
+
+#------------
+#Sukhbaatar, Mongolia
+#----------------
 m.oe<- read.csv("mg.obsexp.csv", header=TRUE)
 
 mtidy<-m.oe %>%gather("Source", "Population", 2:5, na.rm=TRUE)
 msep<- separate(mtidy, col=Source, into=c("OE", "Type")) 
 
-
+#livestock pop
 mloe<-
   filter(msep, Type=="Lsk")%>%
   ggplot(aes(Year, Population, group=OE))+
@@ -31,8 +37,9 @@ mloe<-
            size=4,)+
   theme(legend.position="none")+                 #to remove the legend
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-ggsave(mloe, file="../plots/m.lsk.oe.ts.png", height=3, width=3, dpi=300)
+#ggsave(mloe, file="../plots/m.lsk.oe.ts.png", height=3, width=3, dpi=300)
 
+#human pop
 mhoe<-
   filter(msep, Type=="Pop")%>%
   ggplot(aes(Year, Population, group=OE))+
@@ -53,11 +60,13 @@ mhoe<-
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
-ggsave(mhoe, file="../plots/m.pop.oe.ts.png", height=3, width=3, dpi=300)
+#ggsave(mhoe, file="../plots/m.pop.oe.ts.png", height=3, width=3, dpi=300)
 
 
 ################IMAR###################
-
+#------------
+# Xilingol, Inner Mongolia, China
+#-------------------
 x.oe<- read.csv("xgl.obsexp.csv", header=TRUE)
 
 xtidy<-x.oe %>%gather("Source", "Population", 2:5, na.rm=TRUE)
