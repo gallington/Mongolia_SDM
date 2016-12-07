@@ -227,9 +227,7 @@ xr<- ggplot(xFig, aes(x=Year, y=Biomass, group=Scenario, shape=Scenario))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Remaining Biomass EOY (kg/ha)") +
-  theme(text = element_text(size=10))
-
+  labs(x="Year", y="Remaining Biomass EOY (kg/ha)")
 
 #---------
 #Biomass Color:

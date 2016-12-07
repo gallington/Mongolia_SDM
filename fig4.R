@@ -17,7 +17,7 @@ legend_scenarios <- get_legend(xg + theme(legend.position="bottom"))
 
 # add the legend underneath the row we made earlier. Give it 10% of the height
 # of one plot (via rel_heights).
-
+theme_set(theme_cowplot(font_size=5)) # reduce default font size
 fig4 <- plot_grid(xg,
            xc ,
            xl ,
@@ -29,7 +29,7 @@ fig4 <- plot_grid(xg,
            )
 
 fig4 <- plot_grid(fig4, legend_scenarios, 
-                  ncol = 1, rel_heights = c(1, 0.2))
+                  ncol = 1, rel_heights = c(1, 0.1))
 
 
 # figure4 <- ggdraw() +
@@ -39,4 +39,4 @@ fig4 <- plot_grid(fig4, legend_scenarios,
 #   draw_plot(xr, x = .5, y = 0, width = 0.5, height = 0.5) +
 #   draw_plot_label(c("a)", "b)", "c)", "d)"), 
 #                   c(0, 0.5, 0, 0.5), c(1,1, 0.525, 0.525), size = 15)
-save_plot("../plots/figure4.png", fig4, base_aspect_ratio = 1.3)
+save_plot("../plots/figure4.png", fig4, base_aspect_ratio = 1.3, base_width = 8)
