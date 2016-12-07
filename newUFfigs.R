@@ -9,7 +9,7 @@
 #with files from "Mongolia_SDM/data"
 #which are exported model projections from Vensim
 
-setwd("/nfs/gallington-data/Mongolia_SDM/")
+# setwd("/nfs/gallington-data/Mongolia_SDM/")
 
 library(ggplot2)
 library(scales)
@@ -58,7 +58,7 @@ xFig$Scenario[xFig$Scenario=="Scen4"]<-"S4: No Policy"
 #Just plotting the midrange UFs (=0.75) except for Scen 4 which is =0.6
 ##################################################
 #Grassland ALL Scenarios Black & White with symbols
-xg<- ggplot(xFig, aes(x=Year, y=GrassArea, group=Scenario, shape=Scenario))+
+xg<- ggplot(xFig, aes(x=Year, y=GrassArea/(10^6), group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17,4))+
@@ -74,9 +74,8 @@ xg<- ggplot(xFig, aes(x=Year, y=GrassArea, group=Scenario, shape=Scenario))+
   #theme(legend.text=element_text(labels=c("Base Model", "Increased Precip", "No Grass Policy", "No Crop Policy", "Worst Case")))+
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())+
-  labs(x="Year", 
-       y="Grassland area (ha)", 
-       title="a)")+
+  labs(x="Year")+
+  labs(y=expression(Grassland~area (ha) %*% 10^6)) +
   theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
                                 face='bold'))   
 xg
@@ -117,7 +116,7 @@ xg
 #----------------------
 #Crop b&w
 #--------------------
-xc<- ggplot(xFig, aes(x=Year, y=CropArea, group=Scenario, shape=Scenario))+
+xc<- ggplot(xFig, aes(x=Year, y=CropArea/(10^6), group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17,4))+
@@ -128,7 +127,9 @@ xc<- ggplot(xFig, aes(x=Year, y=CropArea, group=Scenario, shape=Scenario))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Cropland area (ha)", title="b)")
+  labs(x="Year")+
+  labs(y=expression(Cropland~area (ha) %*% 10^6))
+  
 
 #------------
 #Crop color
@@ -166,7 +167,7 @@ xc<- ggplot(xFig, aes(x=Year, y=CropArea, group=Scenario, shape=Scenario))+
 #--------------------
 #Livestock b&w
 #-----------------
-xl<- ggplot(xFig, aes(x=Year, y=LskPop, group=Scenario, shape=Scenario))+
+xl<- ggplot(xFig, aes(x=Year, y=LskPop/10^6, group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17,4))+
@@ -177,7 +178,8 @@ xl<- ggplot(xFig, aes(x=Year, y=LskPop, group=Scenario, shape=Scenario))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Livestock Population EOY (s.u.)", title="c)")
+  labs(x="Year")+
+  labs(y=expression(Livetock~Population~EOY (su) %*% 10^6))
 
 #-------------------
 #Lsk Color:
@@ -225,7 +227,9 @@ xr<- ggplot(xFig, aes(x=Year, y=Biomass, group=Scenario, shape=Scenario))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="(Remaining Biomass EOY (kg/ha)", title="d)")
+  labs(x="Year", y="Remaining Biomass EOY (kg/ha)") +
+  theme(text = element_text(size=10))
+
 
 #---------
 #Biomass Color:
@@ -293,9 +297,9 @@ xr<- ggplot(xFig, aes(x=Year, y=Biomass, group=Scenario, shape=Scenario))+
 
 #MULITPLOT, USING CODE for function (grid_arrange_shared_legend) from new.obs.exp.R
 
-Fig4combo<- grid_arrange_shared_legend(xg, xc, xl, xr, nrow=4, ncol=1)
-#fig4<- arrangeGrob(xg, xc, xl, xr, ncol=1)
-ggsave(Fig4combo, file="./plots/Fig4combo.png", height=10, width=12, dpi=300) #Fig. 4: XILINGHOT PLOT 
+# Fig4combo<- grid_arrange_shared_legend(xg, xc, xl, xr, nrow=4, ncol=1)
+# #fig4<- arrangeGrob(xg, xc, xl, xr, ncol=1)
+# ggsave(Fig4combo, file="./plots/Fig4combo.png", height=10, width=12, dpi=300) #Fig. 4: XILINGHOT PLOT 
 
 
 
@@ -670,3 +674,4 @@ sufb<- ggplot(data=SukhB, aes(x=Scenario, y=Biomass, group=UF, color=UF))+
 # ggsave(sufb, file="sUFb.png", height=5, width=6,dpi=600)
 
 #sUFs<- multiplot(sufg, sufl, sufb, cols=1)
+
