@@ -33,7 +33,7 @@ mloe<-
     theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
                                   face='bold')) +
   annotate("text", x=2010, y=0.5,
-           label=paste("r^2==",0.71),
+           label=paste("R^2==",0.71),
            size=4, parse = TRUE)+
   annotate("text", x = 2010, y = 0.1,
            label = paste("p<",0.001), size = 4, parse = TRUE)+
@@ -57,7 +57,7 @@ mhoe<-
   theme(plot.title=element_text(hjust=0, 
                                 face='bold'))+
   annotate("text", x=2010, y=47,
-           label=paste("r^2==",0.86),
+           label=paste("R^2==",0.86),
            size=4, parse = TRUE)+
   annotate("text", x = 2010, y = 46,
            label = paste("p<",0.001), size = 4, parse = TRUE)+
@@ -95,7 +95,7 @@ xloe<-
         plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
                                 face='bold')) +
   annotate("text", x=2005, y=2,
-           label=paste("r^2==",0.76),
+           label=paste("R^2==",0.76),
            size=4, parse = TRUE)+
   annotate("text", x = 2005, y = 1,
            label = paste("p<",0.001), size = 4, parse = TRUE)+
@@ -120,7 +120,7 @@ xhoe<-
   theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
                                 face='bold'))  +    
   annotate("text", x=2010, y=0.85,
-           label=paste("r^2==",0.86),
+           label=paste("R^2==",0.86),
            size=4, parse = TRUE)+
   annotate("text", x = 2010, y = 0.8,
            label = paste("p<",0.001), size = 4, parse = TRUE)+
