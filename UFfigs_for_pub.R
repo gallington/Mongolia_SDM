@@ -68,14 +68,14 @@ xg<- ggplot(xFig, aes(x=Year, y=GrassArea/(10^6), group=Scenario, shape=Scenario
                                  angle=90))+
   theme(axis.text.y=element_text(size=7, 
                                  vjust=-0.35))+
-  theme(axis.text=element_text(size=7),
-        axis.title=element_text(size=7))+
+  theme(axis.text=element_text(size=8),
+        axis.title=element_text(size=8))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   #theme(legend.text=element_text(labels=c("Base Model", "Increased Precip", "No Grass Policy", "No Crop Policy", "Worst Case")))+
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())+
-  labs(x="Year")+
+  labs(x=" ")+
   labs(y=expression(Grassland~area~ (ha) %*% 10^6)) 
 xg
 
@@ -90,11 +90,11 @@ xc<- ggplot(xFig, aes(x=Year, y=CropArea/(10^6), group=Scenario, shape=Scenario)
   theme_bw()+
   theme(axis.text.x=element_text(size=7, angle=90))+
   theme(axis.text.y=element_text(size=7, vjust=-0.35))+
-  theme(axis.text=element_text(size=7),axis.title=element_text(size=7))+
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=8))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year")+
+  labs(x="")+
   labs(y=expression(Cropland~area~ (ha) %*% 10^6))
   
 
@@ -109,11 +109,11 @@ xl<- ggplot(xFig, aes(x=Year, y=LskPop/10^6, group=Scenario, shape=Scenario))+
   theme_bw()+
   theme(axis.text.x=element_text(size=7, angle=90))+
   theme(axis.text.y=element_text(size=7, vjust=-0.35))+
-  theme(axis.text=element_text(size=7),axis.title=element_text(size=7))+
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=8))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year")+
+  labs(x="")+
   labs(y=expression(Livetock~Population~EOY~ (su) %*% 10^6))
 #--------------
 #Biomass
@@ -125,7 +125,7 @@ xr<- ggplot(xFig, aes(x=Year, y=Biomass, group=Scenario, shape=Scenario))+
   theme_bw()+
   theme(axis.text.x=element_text(size=7, angle=90))+
   theme(axis.text.y=element_text(size=7, vjust=-0.35))+
-  theme(axis.text=element_text(size=7),axis.title=element_text(size=7))+
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=8))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
@@ -165,12 +165,12 @@ require(scales)
 #---------------
 ufg<- ggplot(data=XglG, aes(x=Scenario, y=GrassArea/(10^6), group=UF,color=as.factor(UF)))+
   geom_point(size=5, shape = 19)+ 
-  scale_color_brewer(palette="Blues", name = "XILINGOL \nMax Urban %", 
+  scale_color_brewer(palette="Blues", name = "XILINGOL \nMax Urban Fraction", 
                      guide = guide_legend(direction = "horizontal", title.position = "top")) +
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
-  theme(axis.text.x=element_text(size=7),
+  theme(axis.text.x=element_text(size=10),
         axis.title.x=element_blank())+
   theme(axis.text.y=element_text(size=7, vjust=-0.35),
         axis.title.y=element_text(size=7))+
@@ -246,11 +246,11 @@ sg<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea/(10
   theme_bw()+
   theme(axis.text.x=element_text(size=7, angle=90))+
   theme(axis.text.y=element_text(size=7, vjust=-0.35))+
-  theme(axis.text=element_text(size=7),axis.title=element_text(size=7))+
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=8))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year")+
+  labs(x=" ")+
   labs(y = expression(Grassland~area~ (ha) %*% 10^6))
 sg
 # 
@@ -264,11 +264,11 @@ sl<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=LskPop/(10^6)
   theme_bw()+
   theme(axis.text.x=element_text(size=7, angle=90))+
   theme(axis.text.y=element_text(size=7, vjust=-0.35))+
-  theme(axis.text=element_text(size=7),axis.title=element_text(size=7))+
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=8))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year")+
+  labs(x=" ")+
   labs(y=expression(Livestock~Population~EOY~ (su) %*% 10^6))
 sl
 
@@ -280,7 +280,7 @@ sr<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=Biomass, grou
   theme_bw()+
   theme(axis.text.x=element_text(size=7, angle=90))+
   theme(axis.text.y=element_text(size=7, vjust=-0.35))+
-  theme(axis.text=element_text(size=7),axis.title=element_text(size=7))+
+  theme(axis.text=element_text(size=8),axis.title=element_text(size=8))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
@@ -307,11 +307,11 @@ require(scales)
 
 sufg<- ggplot(data=SukhG, aes(x=Scenario, y=GrassArea/(10^6), group=UF, color=as.factor(UF)))+
   geom_point(shape=19, size=5)+
-  scale_color_brewer(palette="Blues", name = "SUKHBAATAR \nMax Urban %",
+  scale_color_brewer(palette="Blues", name = "SUKHBAATAR \nMax Urban Fraction",
                      guide = guide_legend(direction = "horizontal", title.position = "top")) +
   theme_bw()+
   scale_y_continuous(labels = comma)+
-  scale_x_discrete(labels=c("Base","1","2","3" )) +
+  scale_x_discrete(labels=c("Base","S1","S2","S3" )) +
   theme(axis.text.x=element_text(size=10),
         axis.title.x=element_blank())+
   theme(axis.text.y=element_text(size=10, vjust=-0.35),
@@ -326,7 +326,7 @@ sufl<- ggplot(data=SukhL, aes(x=Scenario, y=LskPop/(10^6), group=UF, color=as.fa
   scale_color_brewer(palette="Blues") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
-  scale_x_discrete(labels=c("Base","1","2","3" )) +
+  scale_x_discrete(labels=c("Base","S1","S2","S3" )) +
   theme(axis.text.x=element_text(size=10),
         axis.title.x=element_blank())+
   theme(axis.text.y=element_text(size=10, vjust=-0.35),
@@ -341,7 +341,7 @@ sufb<- ggplot(data=SukhB, aes(x=Scenario, y=Biomass, group=UF, color=as.factor(U
   scale_color_brewer(palette="Blues") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
-  scale_x_discrete(labels=c("Base","1","2","3" )) +
+  scale_x_discrete(labels=c("Base","S1","S2","S3" )) +
   theme(axis.text.x=element_text(size=10),
         axis.title.x=element_blank())+
   theme(axis.text.y=element_text(size=10, vjust=-0.35),
