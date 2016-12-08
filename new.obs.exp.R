@@ -114,17 +114,16 @@ xhoe<-
                           breaks=c("Base", "Obs"),
                           labels=c("Predicted", "Observed"))+
   theme(legend.title=element_blank())+       # to remove legend title
-  labs(y=expression(Human~Population (su) %*% 10^6)) +
+  labs(y=expression(Human~Population%*% 10^6)) +
   labs(x= "Year") +
   theme_bw()+
-  theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
-                                face='bold'))  +    
   annotate("text", x=2010, y=0.85,
            label=paste("R^2==",0.86),
            size=4, parse = TRUE)+
   annotate("text", x = 2010, y = 0.8,
            label = paste("p<",0.001), size = 4, parse = TRUE)+
-  theme(legend.position="none")+
+  theme(legend.justification=c(0,1), legend.position=c(0.05,0.9))+
+  theme(legend.background = element_rect(fill=NULL))+ 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 # ggsave(xhoe, file="../plots/x.pop.oe.ts.png", height=3, width=3, dpi=300)

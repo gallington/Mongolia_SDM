@@ -1,7 +1,10 @@
-#last edit: 10/20 fixed labelling error in tidying Sukh-hi/lo were switched.
-#last edit 5/11 updating color lines and fixing subsetting issues
-#last edit 4/26 adding in Sukh plotting code
-
+#this is the new code to make the subplots which are then used in the subsequent files to create final figures 
+#for SDM manuscript Figures 4,5 and 6.  Figure 3 code is in - new.obs.expr.R
+#
+#after create subplots below plot final layouts in:
+#Fig. 4- fig4.R
+#Fig. 5- fig5.R
+#Fig. 6- fig6.R
 
 #CAUTION!! If import new runs make sure Hi/Med/Lo are labelled appropriately!
 #Old version of this code had levels labelled backwards!
@@ -170,10 +173,10 @@ ufg<- ggplot(data=XglG, aes(x=Scenario, y=GrassArea/(10^6), group=UF,color=as.fa
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
-  theme(axis.text.x=element_text(size=10),
+  theme(axis.text.x=element_text(size=9),
         axis.title.x=element_blank())+
-  theme(axis.text.y=element_text(size=7, vjust=-0.35),
-        axis.title.y=element_text(size=7))+
+  theme(axis.text.y=element_text(size=9, vjust=-0.35),
+        axis.title.y=element_text(size=9))+
   labs(x="SCENARIOS")+
   labs(y = expression(Grass~Area~ (ha) %*% 10^6)) +
   #guide_legend(title="XILINGOL Max Urban")+ #, title.hjust = 0.5,label=TRUE )+
@@ -193,10 +196,10 @@ ufl<- ggplot(data=XglL, aes(x=Scenario, y=LskPop/(10^6), group=UF, color=as.fact
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
-  theme(axis.text.x=element_text(size=10),
+  theme(axis.text.x=element_text(size=9),
         axis.title.x=element_blank())+
-  theme(axis.text.y=element_text(size=10, vjust=-0.35),
-        axis.title.y=element_text(size=10))+
+  theme(axis.text.y=element_text(size=9, vjust=-0.35),
+        axis.title.y=element_text(size=9))+
   labs(x="SCENARIOS", y="Livestock Pop EOY (su)")+
   labs(y = expression(Livestock~Pop~EOY~ (su) %*% 10^6))+
   theme(legend.position="none")
@@ -211,10 +214,10 @@ ufb<- ggplot(data=XglB, aes(x=Scenario, y=Biomass, group=UF, color=as.factor(UF)
   theme_bw()+
   scale_y_continuous(labels = comma, limits = c(2000,3300))+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
-  theme(axis.text.x=element_text(size=10),
+  theme(axis.text.x=element_text(size=9),
         axis.title.x=element_blank())+
-  theme(axis.text.y=element_text(size=10, vjust=-0.35),
-        axis.title.y=element_text(size=10))+
+  theme(axis.text.y=element_text(size=9, vjust=-0.35),
+        axis.title.y=element_text(size=9))+
   labs(x="SCENARIOS", y="Biomass EOY (kg/ha)")+
   theme(legend.position="none")
 ufb
@@ -312,10 +315,10 @@ sufg<- ggplot(data=SukhG, aes(x=Scenario, y=GrassArea/(10^6), group=UF, color=as
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3" )) +
-  theme(axis.text.x=element_text(size=10),
+  theme(axis.text.x=element_text(size=9),
         axis.title.x=element_blank())+
-  theme(axis.text.y=element_text(size=10, vjust=-0.35),
-        axis.title.y=element_text(size=10))+
+  theme(axis.text.y=element_text(size=9, vjust=-0.35),
+        axis.title.y=element_text(size=9))+
   labs(x="SCENARIOS", y="Grass Area (ha)")+
   labs(y = expression(Grass~Area~ (ha) %*% 10^6))+
   theme(legend.position="none")
@@ -327,10 +330,10 @@ sufl<- ggplot(data=SukhL, aes(x=Scenario, y=LskPop/(10^6), group=UF, color=as.fa
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3" )) +
-  theme(axis.text.x=element_text(size=10),
+  theme(axis.text.x=element_text(size=9),
         axis.title.x=element_blank())+
-  theme(axis.text.y=element_text(size=10, vjust=-0.35),
-        axis.title.y=element_text(size=10))+
+  theme(axis.text.y=element_text(size=9, vjust=-0.35),
+        axis.title.y=element_text(size=9))+
   labs(x="SCENARIOS", y="Livestock Pop EOY (su)")+
   labs(y = expression(Livestock~Pop~EOY~ (su) %*% 10^6))+
   theme(legend.position="none")
@@ -342,10 +345,10 @@ sufb<- ggplot(data=SukhB, aes(x=Scenario, y=Biomass, group=UF, color=as.factor(U
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3" )) +
-  theme(axis.text.x=element_text(size=10),
+  theme(axis.text.x=element_text(size=9),
         axis.title.x=element_blank())+
-  theme(axis.text.y=element_text(size=10, vjust=-0.35),
-        axis.title.y=element_text(size=10))+
+  theme(axis.text.y=element_text(size=9, vjust=-0.35),
+        axis.title.y=element_text(size=9))+
   labs(x="SCENARIOS", y="Biomass EOY (kg/ha)")+
   theme(legend.position="none")
 sufb
