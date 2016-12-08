@@ -28,9 +28,23 @@ http://blog.revolutionanalytics.com/2012/09/how-to-use-your-favorite-fonts-in-r-
 * adjusted y position of c and d labels to slightly above 0.5 (0.525). not sure what looks best
 * maybe get rid of "year" x label on top two panels 
 * separated the commands to save plot into fig4.R, commented out in newUFfigs.R file (now source that file to update individual panels)
-
 * put legend at bottom. control size of legend with the rel_heights argument
+
+* is year as xlab redundant? 
+* gridlines? 
+* how are annotations? should they maybe go in the y axis label? 
+* too big a space between bottom and legend? 
+* the line width and plotting character size within the panels might help distinguish the scenarios?
 
 https://cran.r-project.org/web/packages/cowplot/vignettes/shared_legends.html
 
-* put 4 panels vertical as a 4x1
+# Figure 5
+
+* similar changes as fig 4
+# Figure 6
+
+* combined with plot grid
+* figure coloring with as.factor in first ggplot aes
+* legend tweaking done in fig6.R get_legend
+* adjusted ylim on biomass top plot so it didn't look like it was hanging over the top
+* Should ylims on top and bottom plots be the same to facilitate comparison?? 
