@@ -1,0 +1,50 @@
+Notes for Ginger
+
+`new.obs.exp.R`
+
+# Figure 3
+
+* added superscripts to axis title and annotations
+* should r for r-squared be capitalized? 
+* should x axes have consistent years so they line up?
+
+some references for using expression for superscriptshttps://rstudio-pubs-static.s3.amazonaws.com/136237_170402e5f0b54561bf7605bdea98267a.html
+http://astrostatistics.psu.edu/su07/R/html/grDevices/html/plotmath.html
+http://stackoverflow.com/questions/9723239/ggplot2-annotation-with-superscripts
+
+
+## Cowplot
+
+https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html
+
+## Using computer modern font
+
+http://blog.revolutionanalytics.com/2012/09/how-to-use-your-favorite-fonts-in-r-charts.html
+
+# Figure 4
+
+* moved panel labels to cowplot
+* changed y tick labels to be div by 10^6 
+* adjusted y position of c and d labels to slightly above 0.5 (0.525). not sure what looks best
+* maybe get rid of "year" x label on top two panels 
+* separated the commands to save plot into fig4.R, commented out in newUFfigs.R file (now source that file to update individual panels)
+* put legend at bottom. control size of legend with the rel_heights argument
+
+* is year as xlab redundant? 
+* gridlines? 
+* how are annotations? should they maybe go in the y axis label? 
+* too big a space between bottom and legend? 
+* the line width and plotting character size within the panels might help distinguish the scenarios?
+
+https://cran.r-project.org/web/packages/cowplot/vignettes/shared_legends.html
+
+# Figure 5
+
+* similar changes as fig 4
+# Figure 6
+
+* combined with plot grid
+* figure coloring with as.factor in first ggplot aes
+* legend tweaking done in fig6.R get_legend
+* adjusted ylim on biomass top plot so it didn't look like it was hanging over the top
+* Should ylims on top and bottom plots be the same to facilitate comparison?? 

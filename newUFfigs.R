@@ -13,6 +13,7 @@
 
 library(ggplot2)
 library(scales)
+library(dplyr)
 
 ##
 #~~~~~~~~~~~~~~XILINGOL~~~~~~~~~~~
@@ -60,24 +61,22 @@ xFig$Scenario[xFig$Scenario=="Scen4"]<-"S4: No Policy"
 #Grassland ALL Scenarios Black & White with symbols
 xg<- ggplot(xFig, aes(x=Year, y=GrassArea/(10^6), group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
-  guides(override.aes = list(size=12))+
+  guides(override.aes = list(size=10))+
   scale_shape_manual(values=c(16,1,2,17,4))+
   theme_bw()+
   theme(axis.text.x=element_text(size=10, 
                                  angle=90))+
   theme(axis.text.y=element_text(size=10, 
                                  vjust=-0.35))+
-  theme(axis.text=element_text(size=12),
-        axis.title=element_text(size=12))+
+  theme(axis.text=element_text(size=10),
+        axis.title=element_text(size=10))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   #theme(legend.text=element_text(labels=c("Base Model", "Increased Precip", "No Grass Policy", "No Crop Policy", "Worst Case")))+
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())+
   labs(x="Year")+
-  labs(y=expression(Grassland~area (ha) %*% 10^6)) +
-  theme(plot.title=element_text(hjust=0,             #to left jutify to plot title/subplot label
-                                face='bold'))   
+  labs(y=expression(Grassland~area~ (ha) %*% 10^6)) 
 xg
 
 #xg+geom_line(data=xS46)+geom_point()
@@ -118,17 +117,17 @@ xg
 #--------------------
 xc<- ggplot(xFig, aes(x=Year, y=CropArea/(10^6), group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
-  guides(override.aes = list(size=12))+
+  guides(override.aes = list(size=10))+
   scale_shape_manual(values=c(16,1,2,17,4))+
   theme_bw()+
   theme(axis.text.x=element_text(size=10, angle=90))+
   theme(axis.text.y=element_text(size=10, vjust=-0.35))+
-  theme(axis.text=element_text(size=12),axis.title=element_text(size=12))+
+  theme(axis.text=element_text(size=10),axis.title=element_text(size=10))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
   labs(x="Year")+
-  labs(y=expression(Cropland~area (ha) %*% 10^6))
+  labs(y=expression(Cropland~area~ (ha) %*% 10^6))
   
 
 #------------
@@ -174,12 +173,12 @@ xl<- ggplot(xFig, aes(x=Year, y=LskPop/10^6, group=Scenario, shape=Scenario))+
   theme_bw()+
   theme(axis.text.x=element_text(size=10, angle=90))+
   theme(axis.text.y=element_text(size=10, vjust=-0.35))+
-  theme(axis.text=element_text(size=12),axis.title=element_text(size=12))+
+  theme(axis.text=element_text(size=10),axis.title=element_text(size=10))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
   labs(x="Year")+
-  labs(y=expression(Livetock~Population~EOY (su) %*% 10^6))
+  labs(y=expression(Livetock~Population~EOY~ (su) %*% 10^6))
 
 #-------------------
 #Lsk Color:
@@ -218,12 +217,12 @@ xl<- ggplot(xFig, aes(x=Year, y=LskPop/10^6, group=Scenario, shape=Scenario))+
 #--------------
 xr<- ggplot(xFig, aes(x=Year, y=Biomass, group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
-  guides(override.aes = list(size=12))+
+  guides(override.aes = list(size=10))+
   scale_shape_manual(values=c(16,1,2,17,4))+
   theme_bw()+
   theme(axis.text.x=element_text(size=10, angle=90))+
   theme(axis.text.y=element_text(size=10, vjust=-0.35))+
-  theme(axis.text=element_text(size=12),axis.title=element_text(size=12))+
+  theme(axis.text=element_text(size=10),axis.title=element_text(size=10))+
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
@@ -329,8 +328,9 @@ require(scales)
 #-----------
 # Grassland projections under diff UF settings:
 #---------------
-ufg<- ggplot(data=XglG, aes(x=Scenario, y=GrassArea, group=UF,color=UF))+
-  geom_point(size=10)+  scale_color_brewer(palette="Blues") +
+ufg<- ggplot(data=XglG, aes(x=Scenario, y=GrassArea/(10^6), group=UF,color=as.factor(UF)))+
+  geom_point(size=10)+ 
+  scale_color_brewer(palette="Blues", name = "XILINGOL \nMax Urban %") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
@@ -338,13 +338,13 @@ ufg<- ggplot(data=XglG, aes(x=Scenario, y=GrassArea, group=UF,color=UF))+
         axis.title.x=element_blank())+  #axis.text=element_text(size=)
   theme(axis.text.y=element_text(size=10, vjust=-0.35),
         axis.title.y=element_text(face="bold", size=12))+
-  labs(x="SCENARIOS", y="Grass Area (ha)")+
+  labs(x="SCENARIOS")+
+  labs(y = expression(Grass~Area~ (ha) %*% 10^6)) +
   #guide_legend(title="XILINGOL Max Urban")+ #, title.hjust = 0.5,label=TRUE )+
-  theme(legend.position = "left")+
-  theme(legend.title=element_text(face="bold"))+
-  scale_color_discrete(name="XILINGOL\nMax Urban %", )
-  
-  #theme(legend.position="none")
+  # theme(legend.position = "left")+
+  # theme(legend.title=element_text(face="bold"))
+  # scale_color_discrete(name="XILINGOL\nMax Urban %")
+  theme(legend.position="none")
 ufg  
 
 #-----------
@@ -369,8 +369,8 @@ ufg
 #-----------
 # Lsk Pop projections under diff UF settings:
 #---------------
-ufl<- ggplot(data=XglL, aes(x=Scenario, y=LskPop, group=UF, color=UF))+
-  geom_point(shape=19, size=10)+
+ufl<- ggplot(data=XglL, aes(x=Scenario, y=LskPop/(10^6), group=UF, color=as.factor(UF)))+
+  geom_point(shape=19, size=10)+scale_color_brewer(palette="Blues") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
@@ -379,6 +379,7 @@ ufl<- ggplot(data=XglL, aes(x=Scenario, y=LskPop, group=UF, color=UF))+
   theme(axis.text.y=element_text(size=11, vjust=-0.35),
         axis.title.y=element_text(face="bold", size=16))+
   labs(x="SCENARIOS", y="Livestock Pop EOY (su)")+
+  labs(y = expression(Livestock~Pop~EOY~ (su) %*% 10^6))+
   theme(legend.position="none")
 
 ufl
@@ -386,8 +387,8 @@ ufl
 #-----------
 # Biomass projections under diff UF settings:
 #---------------
-ufb<- ggplot(data=XglB, aes(x=Scenario, y=Biomass, group=UF, color=UF))+
-  geom_point(shape=19, size=10)+
+ufb<- ggplot(data=XglB, aes(x=Scenario, y=Biomass, group=UF, color=as.factor(UF)))+
+  geom_point(shape=19, size=10)+scale_color_brewer(palette="Blues") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","S1","S2","S3", "S4")) +
@@ -415,10 +416,10 @@ ufb
 #   legend <- tmp$grobs[[leg]]
 #   return(legend)
 # }
-xufleg<- get_legend(ufg)
-
-
-xug<- grid.arrange(xufleg, ufg, ufl, ufb, ncol=4)
+# xufleg<- get_legend(ufg)
+# 
+# 
+# xug<- grid.arrange(xufleg, ufg, ufl, ufb, ncol=4)
 
 
 
@@ -457,7 +458,7 @@ Sukh_All$Scenario[Sukh_All$Scenario=="Scen3"]<- "S3: Privatization of Resources"
 
 #GRASSLAND AREA
 
-sg<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea, group=Scenario, shape=Scenario))+
+sg<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea/(10^6), group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17))+
@@ -468,8 +469,9 @@ sg<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea, gr
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Grassland area (ha)", title="a)")
-# sg
+  labs(x="Year")+
+  labs(y = expression(Grassland~area~ (ha) %*% 10^6))
+sg
 # 
 # #Sukh Grass Color:
 # sg.col<-ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea, group=Scenario, shape=Scenario, color=Scenario)) +
@@ -501,7 +503,7 @@ sg<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=GrassArea, gr
 
 clr.red="#fb6a4a"
 #LIVESTOCK POPULATION
-sl<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=LskPop, group=Scenario, shape=Scenario))+
+sl<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=LskPop/(10^6), group=Scenario, shape=Scenario))+
   geom_line() + geom_point()+
   guides(override.aes = list(size=12))+
   scale_shape_manual(values=c(16,1,2,17))+
@@ -512,7 +514,8 @@ sl<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=LskPop, group
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="Livestock Population EOY (s.u.)", title="b)")
+  labs(x="Year")+
+  labs(y=expression(Livestock~Population~EOY~ (su) %*% 10^6))
 sl
 #Lsk Color:
 # sl.col<-ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=LskPop, group=Scenario, shape=Scenario, color=Scenario)) +
@@ -554,8 +557,8 @@ sr<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=Biomass, grou
   scale_x_discrete(breaks=seq(1990,2050,5))+
   theme(legend.position="none")+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  labs(x="Year", y="(Remaining Biomass EOY (kg/ha)", title="c)")
-# sr
+  labs(x="Year", y="Remaining Biomass EOY (kg/ha)")
+sr
 # 
 # #Biomass color
 # sb.col<-ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=Biomass, group=Scenario, shape=Scenario, color=Scenario)) +
@@ -600,16 +603,16 @@ sr<- ggplot(data=subset(Sukh_All, UF %in%c("0.65")), aes(x=Year, y=Biomass, grou
 #bl<-grid.arrange(sg, sl, sr, blank, ncol=2)
 
 #not ideal w white blank
-Fig5combo<- grid_arrange_shared_legend(sg, sl, sr, blank, ncol=2)  #try inserting a blank box
+# Fig5combo<- grid_arrange_shared_legend(sg, sl, sr, blank, ncol=2)  #try inserting a blank box
 #ggsave(Fig5combo, file="./plots/Fig5combo.png", height=8, width=5, dpi=300)
 
 
 
-legend2<- legendGrob(labels=c("Base Model", "S1: Industrialization & Urbanization","S2: Rural Infrastructure Investment","S3: Privatization of Resources"), 
-                     pch=c(16,1,2,17))
-s<- grid.arrange(sg, sl, sr,legend2, nrow=2)
-ggsave(s, file="./plots/Fig5combo.png", height=10, width=12, dpi=300)
-
+# legend2<- legendGrob(labels=c("Base Model", "S1: Industrialization & Urbanization","S2: Rural Infrastructure Investment","S3: Privatization of Resources"), 
+#                      pch=c(16,1,2,17))
+# s<- grid.arrange(sg, sl, sr,legend2, nrow=2)
+# ggsave(s, file="./plots/Fig5combo.png", height=10, width=12, dpi=300)
+# 
 
 
 #############
@@ -627,8 +630,9 @@ SukhB<- select(Sukh, UF, Scenario, Biomass)
 
 require(scales)
 
-sufg<- ggplot(data=SukhG, aes(x=Scenario, y=GrassArea, group=UF, color=UF))+
+sufg<- ggplot(data=SukhG, aes(x=Scenario, y=GrassArea/(10^6), group=UF, color=as.factor(UF)))+
   geom_point(shape=19, size=10)+
+  scale_color_brewer(palette="Blues", name = "SUKHBAATAR \nMax Urban %") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","1","2","3" )) +
@@ -637,11 +641,12 @@ sufg<- ggplot(data=SukhG, aes(x=Scenario, y=GrassArea, group=UF, color=UF))+
   theme(axis.text.y=element_text(size=11, vjust=-0.35),
         axis.title.y=element_text(face="bold", size=16))+
   labs(x="SCENARIOS", y="Grass Area (ha)")+
+  labs(y = expression(Grass~Area~ (ha) %*% 10^6))+
   theme(legend.position="none")
+sufg
 
-
-sufl<- ggplot(data=SukhL, aes(x=Scenario, y=LskPop, group=UF, color=UF))+
-  geom_point(shape=19, size=10)+
+sufl<- ggplot(data=SukhL, aes(x=Scenario, y=LskPop/(10^6), group=UF, color=as.factor(UF)))+
+  geom_point(shape=19, size=10)+scale_color_brewer(palette="Blues") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","1","2","3" )) +
@@ -650,10 +655,12 @@ sufl<- ggplot(data=SukhL, aes(x=Scenario, y=LskPop, group=UF, color=UF))+
   theme(axis.text.y=element_text(size=11, vjust=-0.35),
         axis.title.y=element_text(face="bold", size=16))+
   labs(x="SCENARIOS", y="Livestock Pop EOY (su)")+
+  labs(y = expression(Livestock~Pop~EOY~ (su) %*% 10^6))+
   theme(legend.position="none")
+sufl
 
-sufb<- ggplot(data=SukhB, aes(x=Scenario, y=Biomass, group=UF, color=UF))+
-  geom_point(shape=19, size=10)+
+sufb<- ggplot(data=SukhB, aes(x=Scenario, y=Biomass, group=UF, color=as.factor(UF)))+
+  geom_point(shape=19, size=10)+scale_color_brewer(palette="Blues") +
   theme_bw()+
   scale_y_continuous(labels = comma)+
   scale_x_discrete(labels=c("Base","1","2","3" )) +
@@ -663,7 +670,7 @@ sufb<- ggplot(data=SukhB, aes(x=Scenario, y=Biomass, group=UF, color=UF))+
         axis.title.y=element_text(face="bold", size=16))+
   labs(x="SCENARIOS", y="Biomass EOY (kg/ha)")+
   theme(legend.position="none")
-
+sufb
 
 # setwd("/nfs/gallington-data/Mongolia_SDM/plots")
 # 
