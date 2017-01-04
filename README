@@ -1,0 +1,6 @@
+This repository contains the code to process model outputs and produce figures for the manuscript:
+
+Allington, G.R.H., W. Li, and D.G. Brown. (2017) Urbanization and environmental policy effect on the future availability of grazing resources on the Mongolian Plateau: modeling socio-environmental system dynamics. Environmental Science and Policy 68: 35-46.
+
+Model outpts from Vensim models are in the /data folder 
+Vensim model files in /vensim_model folder
