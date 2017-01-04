@@ -1,0 +1,576 @@
+{UTF-8}
+RURAL LABOUR PERCENTAGE=
+	IF THEN ELSE(0.5+0.01*(Time-1990)<0.8,0.5+0.01*(Time-1990),0.8)
+	~	
+	~		|
+
+Urbanized fraction=
+	IF THEN ELSE(Time<2005,0.205,
+	IF THEN ELSE(MAXIMUM URBAN PERCENTAGE=0.5,0.5/(1+3.923*EXP(-0.049*(Time-1990))),
+	IF THEN ELSE(MAXIMUM URBAN PERCENTAGE=0.55,0.55/(1+4.243*EXP(-0.049*(Time-1990))),
+	IF THEN ELSE(MAXIMUM URBAN PERCENTAGE=0.6,0.6/(1+3.923*EXP(-0.042*(Time-1990))),
+	IF THEN ELSE(MAXIMUM URBAN PERCENTAGE=0.65,0.65/(1+4.243*EXP(-0.049*(Time-1990))),
+	IF THEN ELSE(MAXIMUM URBAN PERCENTAGE=0.7,0.7/(1+4.574*EXP(-0.056*(Time-1990))),
+	IF THEN ELSE(MAXIMUM URBAN PERCENTAGE=0.75,0.75/(1+4.912*EXP(-0.054*(Time-1990))),
+	IF THEN ELSE(MAXIMUM URBAN PERCENTAGE=0.8,0.8/(1+5.255*EXP(-0.053*(Time-1990))),
+	0.5))))))))
+	~	percent
+	~		|
+
+PRECIPITATION=
+	IF THEN ELSE(Time<2006,Precip0,RANDOM NORMAL(100,383,212-3*(Time-1990),75,NOISE SEED\
+		))
+	~	mm
+	~		|
+
+PreLOOKUP(
+	[(1990,0)-(2005,400)],(1990,383),(1991,220),(1992,166),(1993,270),(1994,361),(1995,144\
+		),(1996,215),(1997,153),(1998,307),(1999,222),(2000,138),(2001,134),(2002,191),(2003\
+		,153),(2004,140),(2005,101.5))
+	~	
+	~		|
+
+Precip0=
+	PreLOOKUP(Time)
+	~	
+	~		|
+
+livestock per labor=
+	LSK per labor LOOKUP(available grass biomass per rural labor)*LABOR EFFICIENCY COEFFICIENT
+	~	sheep/person
+	~		|
+
+Net primary production=
+	(0.3944*PRECIPITATION+313.06)*10
+	~	
+	~		|
+
+NOISE SEED=
+	8
+	~	
+	~		|
+
+Additional sold rate=
+	SOLD LOOKUP(remained biomass deficit)*MARKET COEFFICIENT
+	~	
+	~		|
+
+actual total biomass per unit grassland=
+	RANDOM NORMAL(3300,4600,Net primary production,265,51)
+	~	kg/ha
+	~		|
+
+MARKET COEFFICIENT=
+	1
+	~	Dmnl
+	~		|
+
+MINIMUM REMAINED BIOMASS=
+	1000
+	~	
+	~		|
+
+MAXIMUM URBAN PERCENTAGE=
+	0.65
+	~	
+	~		|
+
+estimated grazed biomass per unit grassland=
+	livestock density*GRASS BIOMASS DEMAND PER LIVESTOCK
+	~	
+	~		|
+
+remained biomass deficit=
+	MINIMUM REMAINED BIOMASS-estimated remained biomass per unit grassland
+	~	
+	~		|
+
+degradation rate=
+	DEGRADATION LOOKUP(actual remainder biomass per unit grassland)*GRAZING INTENSITY COEFFICIENT
+	~	
+	~		|
+
+degraded land to grassland=
+	Degraded area*natural succession rate
+	~	ha
+	~		|
+
+GRAZING INTENSITY COEFFICIENT=
+	1
+	~	
+	~		|
+
+actual remainder biomass per unit grassland=
+	REMAINED LOOKUP(estimated remained biomass per unit grassland)
+	~	
+	~		|
+
+increased urban percentage=
+	IF THEN ELSE(Time<2002, 0, 0.7*(0.0152*(Time-1987)-0.2045)*EXP(-0.0076*(Time-1987)^2\
+		+0.2045*(Time-1987)-0.4924)/(1+EXP(-0.0076*(Time-1987)^2+0.2045*(Time-1987)-0.4924)\
+		)/(1+EXP(-0.0076*(Time-1987)^2+0.2045*(Time-1987)-0.4924)))
+	~	
+	~		|
+
+available grassland=
+	Grassland*0.95
+	~	
+	~		|
+
+unit urban land per urban people=
+	Urban land/urban population
+	~	
+	~		|
+
+LABOR EFFICIENCY COEFFICIENT=
+	1+0.02*(Time-1990)
+	~	
+	~		|
+
+Grassland= INTEG (
+	degraded land to grassland-grassland to degraded land-grassland to urban land,
+		7.5e+006)
+	~	ha
+	~		|
+
+grassland to urban land=
+	increased urban population*unit urban land per urban people
+	~	
+	~		|
+
+Urban land= INTEG (
+	grassland to urban land,
+		6552)
+	~	
+	~		|
+
+increased urban population=
+	Population*increased urban percentage
+	~	
+	~		|
+
+Total biomass for grazing=
+	available grassland*available grazing biomass per unit grassland
+	~	kg
+	~		|
+
+available grass biomass per rural labor=
+	Total biomass for grazing/grazing labour
+	~	kg/person
+	~		|
+
+available grazing biomass per unit grassland=
+	estimated biomass per unit grassland*utilization rate
+	~	
+	~		|
+
+death rate under extreme climate=
+	RANDOM NORMAL(0, 0.25 , 0.05 , 0.1 , 61 )
+	~	
+	~		|
+
+SOLD LOOKUP(
+	[(-4000,0)-(4000,1)],(-4000,0),(0,0),(1000,0.25))
+	~	
+	~		|
+
+LSK per labor LOOKUP(
+	[(200000,50)-(1e+006,200)],(200000,60),(400000,75),(800000,75))
+	~	
+	~		|
+
+estimated biomass per unit grassland=
+	SMOOTHI(actual total biomass per unit grassland,3,3938)
+	~	
+	~		|
+
+GRASS BIOMASS DEMAND PER LIVESTOCK=
+	4000
+	~	kg/sheep
+	~		|
+
+estimated remained biomass per unit grassland=
+	actual total biomass per unit grassland-estimated grazed biomass per unit grassland
+	~	
+	~		|
+
+LSK at the end of year=
+	Livestock population-Additional sold LSK
+	~	
+	~		|
+
+Maximum allowable livestock population=
+	grazing labour*livestock per labor
+	~	sheep
+	~		|
+
+livestock density=
+	Livestock population/available grassland
+	~	
+	~		|
+
+Livestock population=
+	Maximum allowable livestock population*(1-death rate under extreme climate)
+	~	sheep
+	~		|
+
+utilization rate=
+	UTLIZATION RATE LOOKUP(estimated biomass per unit grassland)
+	~	
+	~		|
+
+natural succession rate=
+	0.02*PRECIPITATION/200*(2-Temperature/3)
+	~	
+	~		|
+
+REMAINED LOOKUP(
+	[(0,0)-(10000,10000)],(0,1000),(1000,1000),(10000,10000))
+	~	
+	~		|
+
+Additional sold LSK=
+	Additional sold rate*available grassland
+	~	
+	~		|
+
+UTLIZATION RATE LOOKUP(
+	[(0,0)-(8000,1)],(1000,0.3),(3000,0.5),(8000,0.7))
+	~	
+	~		|
+
+Temperature=
+	RANDOM NORMAL(0,4,3,1,61)
+	~	
+	~		|
+
+DEGRADATION LOOKUP(
+	[(0,0)-(10000,0.1)],(1000,0.01),(2000,0.0015),(5000,0.001),(10000,0.0005))
+	~	
+	~		|
+
+Degraded area= INTEG (
+	grassland to degraded land-degraded land to grassland,
+		722163)
+	~	ha [0,?]
+	~		|
+
+REMAINED BIOMASS LOOKUP(
+	[(0,0)-(10000,10000)],(0,1000),(1000,1000),(10000,10000))
+	~	
+	~		|
+
+grassland to degraded land=
+	Grassland*DELAY1I(degradation rate,1,0.001)
+	~	ha
+	~		|
+
+MIGRATION LOOKUP(
+	[(1990,0)-(2050,2000)],(1990,150),(1990,150),(2003,1500),(2013,700),(2050,500))
+	~	
+	~		|
+
+Net migration=
+	MIGRATION LOOKUP(Time)
+	~	
+	~		|
+
+IMMIGRATION LOOKUP(
+	[(1990,0)-(2050,5000)],(1990,1000),(2000,2000),(2010,5000),(2020,2000),(2030,1000),(\
+		2050,0))
+	~	
+	~		|
+
+Immigration number=
+	Time-Time
+	~	
+	~		|
+
+NATURAL INCREASE RATE=
+	0.016
+	~	
+	~		|
+
+Number of net birth=
+	Population*NATURAL INCREASE RATE
+	~	person/Year
+	~		|
+
+Population= INTEG (
+	Number of net birth-Net migration,
+		53197)
+	~	person
+	~		|
+
+grazing labour=
+	RURAL LABOUR PERCENTAGE*rural population
+	~	person
+	~		|
+
+rural population=
+	Population*(1-Urbanized fraction)
+	~	person
+	~		|
+
+urban population=
+	Population*Urbanized fraction
+	~	person
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 2050
+	~	Year
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 1990
+	~	Year
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Year [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 1
+	~	Year [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,80,0
+10,1,Population,346,275,68,20,3,131,0,0,0,0,0,0
+12,2,48,50,277,10,8,0,3,0,0,-1,0,0,0
+1,3,5,1,4,0,0,22,0,0,0,-1--1--1,,1|(221,273)|
+1,4,5,2,100,0,0,22,0,0,0,-1--1--1,,1|(106,273)|
+11,5,48,158,273,6,8,34,3,0,0,1,0,0,0
+10,6,Number of net birth,158,300,47,19,40,131,0,0,-1,0,0,0
+10,7,NATURAL INCREASE RATE,136,180,63,19,8,3,0,0,0,0,0,0
+1,8,7,5,1,0,0,0,2,64,0,-1--1--1,|12||0-0-0,1|(154,227)|
+10,9,grazing labour,649,159,44,11,8,3,0,0,0,0,0,0
+10,10,rural population,442,180,49,11,8,3,0,0,0,0,0,0
+10,11,Urbanized fraction,324,113,52,19,8,131,0,0,0,0,0,0
+1,12,1,10,1,0,0,0,0,64,0,-1--1--1,,1|(414,229)|
+1,13,11,10,1,0,0,0,0,64,0,-1--1--1,,1|(359,159)|
+1,14,10,9,1,0,0,0,0,64,0,-1--1--1,,1|(536,153)|
+1,15,1,6,1,0,0,0,0,64,0,-1--1--1,,1|(268,314)|
+10,16,urban population,287,179,53,11,8,3,0,0,0,0,0,0
+1,17,1,16,1,0,0,0,0,64,0,-1--1--1,,1|(311,230)|
+1,18,11,16,1,0,0,0,0,64,0,-1--1--1,,1|(305,135)|
+10,19,RURAL LABOUR PERCENTAGE,611,97,62,19,8,3,0,0,0,0,0,0
+1,20,19,9,1,0,0,0,0,64,0,-1--1--1,,1|(628,127)|
+10,21,Time,524,215,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,22,Time,255,36,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,23,22,11,0,0,0,0,0,64,0,-1--1--1,,1|(280,65)|
+12,24,48,691,276,10,8,0,3,0,0,-1,0,0,0
+1,25,27,24,4,0,0,22,0,0,0,-1--1--1,,1|(617,274)|
+1,26,27,1,100,0,0,22,0,0,0,-1--1--1,,1|(477,274)|
+11,27,48,547,274,6,8,34,3,0,0,1,0,0,0
+10,28,Net migration,547,301,43,11,40,3,0,0,-1,0,0,0
+10,29,MIGRATION LOOKUP,629,233,47,19,8,3,0,0,0,0,0,0
+1,30,21,27,1,0,0,0,0,64,0,-1--1--1,,1|(543,241)|
+1,31,29,27,1,0,0,0,0,64,0,-1--1--1,,1|(577,252)|
+10,32,Grassland,339,539,47,40,3,131,0,0,0,0,0,0
+10,33,Degraded area,329,780,52,18,3,131,0,0,0,0,0,0
+1,34,36,33,4,0,0,22,0,0,0,-1--1--1,,1|(348,714)|
+1,35,36,32,100,0,0,22,0,0,0,-1--1--1,,1|(348,617)|
+11,36,732,348,661,8,6,33,3,0,0,4,0,0,0
+10,37,grassland to degraded land,399,661,46,19,40,3,0,0,-1,0,0,0
+1,38,40,32,4,0,0,22,0,0,0,-1--1--1,,1|(312,615)|
+1,39,40,33,100,0,0,22,0,0,0,-1--1--1,,1|(312,713)|
+11,40,876,312,658,8,6,33,3,0,0,2,0,0,0
+10,41,degraded land to grassland,250,658,54,19,40,3,0,0,-1,0,0,0
+10,42,degradation rate,513,713,51,11,8,3,0,0,0,0,0,0
+1,43,42,37,1,0,0,0,2,65,0,-1--1--1,|12||0-0-0,1|(452,697)|
+1,44,32,37,1,0,0,0,0,64,0,-1--1--1,,1|(400,600)|
+10,45,DEGRADATION LOOKUP,647,697,59,19,8,3,0,0,0,0,0,0
+1,46,45,42,1,0,0,0,0,64,0,-1--1--1,,1|(561,695)|
+10,47,Livestock population,949,283,34,19,8,131,0,0,0,0,0,0
+10,48,death rate under extreme climate,1039,213,52,19,8,3,0,0,0,0,0,0
+10,49,GRASS BIOMASS DEMAND PER LIVESTOCK,1328,503,66,28,8,3,0,0,0,0,0,0
+10,50,livestock per labor,915,152,58,11,8,3,0,0,0,0,0,0
+10,51,Maximum allowable livestock population,812,227,64,19,8,3,0,0,0,0,0,0
+1,52,50,51,1,0,0,0,0,64,0,-1--1--1,,1|(867,200)|
+1,53,51,47,1,0,0,0,0,64,0,-1--1--1,,1|(873,269)|
+10,54,Net primary production,994,813,39,19,8,3,0,0,0,0,0,0
+1,55,48,47,1,0,0,0,0,64,0,-1--1--1,,1|(993,244)|
+10,56,Total biomass for grazing,1325,689,56,19,8,3,0,0,0,0,0,0
+10,57,actual total biomass per unit grassland,972,722,62,19,8,3,0,0,0,0,0,0
+1,58,54,57,1,0,0,0,0,64,0,-1--1--1,,1|(991,770)|
+10,59,PRECIPITATION,894,851,40,20,8,3,0,0,0,0,0,0
+1,60,59,54,1,0,0,0,0,64,0,-1--1--1,,1|(956,848)|
+10,61,available grass biomass per rural labor,1280,622,73,19,8,3,0,0,0,0,0,0
+1,62,56,61,1,0,0,0,0,64,0,-1--1--1,,1|(1312,659)|
+10,63,available grass biomass per rural labor,819,59,78,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,64,63,50,1,0,0,0,0,64,0,-1--1--1,,1|(857,110)|
+10,65,grazing labour,1346,557,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,66,65,61,1,0,0,0,0,64,0,-1--1--1,,1|(1315,580)|
+10,67,estimated grazed biomass per unit grassland,1161,535,54,28,8,3,0,0,0,0,0,0
+1,68,49,67,1,0,0,0,0,64,0,-1--1--1,,1|(1225,488)|
+10,69,livestock density,821,379,52,11,8,3,0,0,0,0,0,0
+10,70,actual remainder biomass per unit grassland,903,649,52,28,8,3,0,0,0,0,0,0
+1,71,57,94,1,0,0,0,0,64,0,-1--1--1,,1|(1036,687)|
+1,72,67,94,1,0,0,0,0,64,0,-1--1--1,,1|(1117,597)|
+10,73,Time,799,807,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,74,estimated biomass per unit grassland,1177,699,71,19,8,3,0,0,0,0,0,0
+10,75,UTLIZATION RATE LOOKUP,1183,848,57,19,8,3,0,0,0,0,0,0
+10,76,available grazing biomass per unit grassland,1244,769,52,28,8,3,0,0,0,0,0,0
+1,77,74,76,1,0,0,0,0,64,0,-1--1--1,,1|(1202,729)|
+1,78,76,56,1,0,0,0,0,64,0,-1--1--1,,1|(1314,745)|
+10,79,utilization rate,1113,780,43,11,8,3,0,0,0,0,0,0
+1,80,57,74,0,0,0,0,2,65,0,-1--1--1,|12||0-0-0,1|(1063,711)|
+1,81,74,79,1,0,0,0,0,64,0,-1--1--1,,1|(1135,730)|
+1,82,79,76,1,0,0,0,0,64,0,-1--1--1,,1|(1167,766)|
+1,83,75,79,1,0,0,0,0,64,0,-1--1--1,,1|(1145,820)|
+10,84,LSK per labor LOOKUP,957,76,47,19,8,3,0,0,0,0,0,0
+1,85,84,50,1,0,0,0,0,64,0,-1--1--1,,1|(949,113)|
+10,86,REMAINED LOOKUP,796,586,43,19,8,3,0,0,0,0,0,0
+1,87,86,70,1,0,0,0,0,64,0,-1--1--1,,1|(865,598)|
+10,88,Additional sold rate,1124,374,37,21,8,131,0,0,0,0,0,0
+10,89,SOLD LOOKUP,1211,320,57,11,8,131,0,0,0,0,0,0
+1,90,89,88,1,0,0,0,0,64,0,-1--1--1,,1|(1183,346)|
+10,91,Additional sold LSK,1082,311,38,18,8,131,0,0,0,0,0,0
+1,92,88,91,1,0,0,0,0,64,0,-1--1--1,,1|(1110,336)|
+1,93,47,69,1,0,0,0,0,64,0,-1--1--1,,1|(925,308)|
+10,94,estimated remained biomass per unit grassland,1073,637,83,19,8,3,0,0,0,0,0,0
+1,95,94,70,0,0,0,0,0,64,0,-1--1--1,,1|(979,642)|
+1,96,73,59,1,0,0,0,0,64,0,-1--1--1,,1|(862,815)|
+10,97,remained biomass deficit,1024,559,57,19,8,3,0,0,-1,0,0,0
+10,98,LSK at the end of year,974,376,49,19,8,3,0,0,0,0,0,0
+1,99,91,98,1,0,0,0,0,64,0,-1--1--1,,1|(1031,331)|
+1,100,47,98,0,0,0,0,0,64,0,-1--1--1,,1|(959,322)|
+1,101,94,97,0,0,0,0,0,64,0,-1--1--1,,1|(1052,603)|
+1,102,9,51,0,0,0,0,0,64,0,-1--1--1,,1|(714,186)|
+10,103,natural succession rate,152,731,48,19,8,3,0,0,0,0,0,0
+1,104,33,41,1,0,0,0,0,64,0,-1--1--1,,1|(277,726)|
+1,105,103,41,1,0,0,0,0,64,0,-1--1--1,,1|(170,694)|
+10,106,PRECIPITATION,103,818,40,20,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,107,Temperature,209,803,41,11,8,3,0,0,0,0,0,0
+1,108,106,103,1,0,0,0,0,64,0,-1--1--1,,1|(105,773)|
+1,109,107,103,1,0,0,0,0,64,0,-1--1--1,,1|(180,776)|
+10,110,available grassland,195,443,58,11,8,3,0,0,0,0,0,0
+1,111,32,110,1,0,0,0,0,64,0,-1--1--1,,1|(250,509)|
+10,112,available grassland,777,295,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,113,112,69,1,0,0,0,0,64,0,-1--1--1,,1|(792,342)|
+10,114,available grassland,1168,223,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,115,114,91,1,0,0,0,0,64,0,-1--1--1,,1|(1097,256)|
+10,116,Urban land,624,520,40,20,3,3,0,0,0,0,0,0
+1,117,119,116,4,0,0,22,0,0,0,-1--1--1,,1|(535,519)|
+1,118,119,32,100,0,0,22,0,0,0,-1--1--1,,1|(430,519)|
+11,119,844,480,519,6,8,34,3,0,0,1,0,0,0
+10,120,grassland to urban land,480,543,78,16,40,131,0,0,-1,0,0,0
+10,121,increased urban population,439,432,50,19,8,3,0,0,0,0,0,0
+10,122,increased urban percentage,547,371,50,19,8,3,0,0,0,0,0,0
+1,123,1,121,1,0,0,0,0,64,0,-1--1--1,,1|(414,336)|
+1,124,122,121,1,0,0,0,0,64,0,-1--1--1,,1|(508,407)|
+1,125,121,119,1,0,0,0,0,64,0,-1--1--1,,1|(458,483)|
+10,126,unit urban land per urban people,528,614,59,19,8,3,0,0,0,0,0,0
+10,127,urban population,654,631,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,128,127,126,1,0,0,0,0,64,0,-1--1--1,,1|(593,637)|
+1,129,116,126,1,0,0,0,0,64,0,-1--1--1,,1|(582,567)|
+1,130,126,120,1,0,0,0,0,64,0,-1--1--1,,1|(507,584)|
+10,131,Time,670,357,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,132,131,122,1,0,0,0,0,64,0,-1--1--1,,1|(627,353)|
+10,133,available grassland,1385,763,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,134,133,56,0,0,0,0,0,64,0,-1--1--1,,1|(1359,731)|
+10,135,actual remainder biomass per unit grassland,472,771,55,28,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,136,135,42,1,0,0,0,0,64,0,-1--1--1,,1|(482,742)|
+10,137,Time,931,173,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,138,LABOR EFFICIENCY COEFFICIENT,1065,147,54,28,8,3,0,0,0,0,0,0
+10,139,Time,1069,71,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,140,139,138,1,0,0,0,0,64,0,-1--1--1,,1|(1077,99)|
+10,141,GRAZING INTENSITY COEFFICIENT,640,772,54,28,8,3,0,0,0,0,0,0
+1,142,141,42,1,0,0,0,0,64,0,-1--1--1,,1|(583,741)|
+10,143,MARKET COEFFICIENT,1246,391,54,19,8,3,0,0,0,0,0,0
+1,144,143,88,1,0,0,0,0,64,0,-1--1--1,,1|(1175,404)|
+10,145,livestock density,1015,493,33,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,146,145,67,1,0,0,0,0,64,0,-1--1--1,,1|(1087,491)|
+10,147,remained biomass deficit,1050,432,62,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,148,147,88,1,0,0,0,0,64,0,-1--1--1,,1|(1067,393)|
+10,149,MAXIMUM URBAN PERCENTAGE,158,107,73,19,8,3,0,0,0,0,0,0
+1,150,149,11,1,0,0,0,0,64,0,-1--1--1,,1|(244,109)|
+10,151,MINIMUM REMAINED BIOMASS,851,511,43,28,8,3,0,0,0,0,0,0
+1,152,151,97,1,0,0,0,0,64,0,-1--1--1,,1|(929,543)|
+10,153,NOISE SEED,1016,921,47,11,8,3,0,0,0,0,0,0
+1,154,153,59,0,0,0,0,0,64,0,-1--1--1,,1|(968,893)|
+1,155,138,50,0,0,0,0,0,64,0,-1--1--1,,1|(998,148)|
+10,156,PreLOOKUP,742,958,45,11,8,3,0,0,0,0,0,0
+10,157,Precip0,777,887,26,11,8,3,0,0,0,0,0,0
+1,158,156,157,0,0,0,0,0,128,0,-1--1--1,,1|(755,928)|
+1,159,73,157,0,0,0,0,0,128,0,-1--1--1,,1|(789,840)|
+1,160,157,59,0,0,0,0,0,128,0,-1--1--1,,1|(821,873)|
+12,161,0,1186,105,61,19,8,7,0,5,-1,0,0,0,192-192-192,192-192-192,|12||0-0-0
+LEC baseline value should be 0.02
+10,162,Time,567,25,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,163,162,19,1,0,0,0,0,64,0,-1--1--1,,1|(578,56)|
+12,164,4262354,1888,215,335,196,3,188,0,0,2,0,0,0
+Grassland,Graph
+12,165,6423440,1841,574,150,150,3,44,0,0,2,0,0,0
+LSK at the end of year,Graph
+12,166,5375552,1626,909,150,150,3,44,0,0,2,0,0,0
+Degraded area,Graph
+12,167,5246416,2068,887,150,150,3,44,0,0,2,0,0,0
+actual remainder biomass per unit grassland,Graph
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 2
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,80,0
+12,1,1641218,329,300,238,175,3,188,0,0,2,0,0,0
+actual remainder biomass per unit grassland,Graph
+12,2,2558130,892,304,241,174,3,188,0,0,2,0,0,0
+LSK at the end of year,Graph
+12,3,2951336,870,704,150,150,3,44,0,0,2,0,0,0
+LABOR EFFICIENCY COEFFICIENT,Graph
+12,4,2492476,1544,298,282,193,3,156,0,0,2,0,0,0
+Grassland,Graph
+12,5,8784398,1548,747,267,203,3,188,0,0,2,0,0,0
+Urban land,Graph
+12,6,2623668,339,751,249,202,3,188,0,0,2,0,0,0
+livestock per labor,Graph
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 3
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,80,0
+///---\\\
+:L<%^E!@
+1:425Base65.vdf
+1:425S2Med.vdf
+1:425S1Med.vdf
+9:Base7
+22:$,Dollar,Dollars,$s
+22:Hour,Hours
+22:Month,Months
+22:Person,People,Persons
+22:Unit,Units
+22:Week,Weeks
+22:Year,Years
+22:Day,Days
+23:0
+18:425BaseUF.sens.vsc
+20:425BasesenstUF.lst
+15:0,0,0,0,0,0
+19:80,0
+27:2,
+34:0,
+4:Time
+5:MAXIMUM URBAN PERCENTAGE
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:0
+41:0
+42:1
+24:1990
+25:2050
+26:2050
