@@ -1,24 +1,22 @@
-#last edit: 27 Apr 16: updating Xgl Scen 4 code to use UF=0.6. 
-#Need to rerun model for Scen 4 to get new outputs under new code from Wei (waiting on this)
-#Then can rerun this code to bring in adjusted UF vals for Scen 4--> **then plot w. UF=0.6 for S4** in next step
-#26 April 16 : added in Sukh code 
-#note: loaded baserun code differently for Sukh than Xgl. Only extracted baserun median UF = 0.65 from Vensim
-
-setwd("./data")
+# This code aggregates all of the model outputs for each scenario
+# and each variable and tidies them 
+# All Xilingol outputs first, then Sukhbaatar
+# SUKHBAATAR CODE STARTS AT line: ~250
+setwd("./data") # I know this isn't legit to change this but i'm afraid i'll break something if I try to fix it now
 
 library(dplyr)
 library("tidyr")
 
-#SUKHBAATAR CODE STARTS AT line: ~250
+
 
 #############################
 #XILINGOL
 #######################
 
-#BASE Model run outputs for variables: Grass, Crop, 
-#Livestock Pop at end of year and Remaining biomass at end of year
+# BASE Model run outputs for variables: Grass, Crop, 
+# Livestock Pop at end of year and Remaining biomass at end of year
 
-#Baseline-Grass
+# Baseline-Grass
 
 XBG<- read.csv("XglBaseGrass.csv", header=TRUE, check.names = FALSE)
 colnames(XBG)[1]<-"UF"      #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
@@ -248,13 +246,14 @@ colnames(XS4)[5:7]<-c("CropArea", "LskPop", "Biomass")
 
 Xgl_All<-bind_rows(XBase, XS1, XS2, XS3, XS4)
 
-##
+# This is what wil be called in future steps
+
 Xgl_All
 
 #
 #
 #
-#Now MONGOLIA:
+# Now MONGOLIA:
 #
 #
 #
@@ -266,36 +265,36 @@ Xgl_All
 #
 ###########################################
 
-#CAUTION!! If import new runs make sure Hi/Med/Lo are labelled appropriately!
-#Old version of this code had levels labelled backwards!
+# CAUTION!! If import new runs make sure Hi/Med/Lo are labelled appropriately!
+# Old version of this code had levels labelled backwards!
 
 
-#BASE Model run outputs for variables: 
-#Grass, Livestock Pop at end of year and Remaining biomass at end of year
+# BASE Model run outputs for variables: 
+# Grass, Livestock Pop at end of year and Remaining biomass at end of year
 
-#In the run on 4/25 I just included the median UF scenario Max Urban %=0.65 
-#as the baseline setting so there is just one projection for each var rather than
-#three for each as with Xilingol above. 
-#Change code to match that above if need to show all UF scenarios for each var
+# In the run on 4/25 I just included the median UF scenario Max Urban %=0.65 
+# as the baseline setting so there is just one projection for each var rather than
+# three for each as with Xilingol above. 
+# Change code to match that above if need to show all UF scenarios for each var
 
-#Baseline- 
+# Baseline- 
 
 SukhBase <- read.csv("SukBase.csv", header=TRUE, check.names = FALSE)
 SukhBase<- subset(SukhBase, select= -c(Var))
-#already did this next step in Excel for this one
-#colnames(XBG)[1]<-"UF"      #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
+# already did this next step in Excel for this one
+# colnames(XBG)[1]<-"UF"      #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
 SukhBase$UF<- c(0.65, 0.65, 0.65)   #rename the UFs steps used
 SukhBase["Scenario"]<-c("Baseline")  #Add a new column for Scenario name. This becomes column #64
 SukhBase<-SukhBase[c(1,63,2:62)] #reorder the columns
-#Baserun Grass
+# Baserun Grass
 SukhBaseGrass<- SukhBase[1,]
 SukhBaseGrass<-tbl_df(SukhBaseGrass)  #convert to dplyr tbl class
 SukBGrasst<-gather(SukhBaseGrass, Year, GrassArea, 3:63)   #tidy the data
-#Baserun Lsk
+# Baserun Lsk
 SukhBaseLsk<-SukhBase[2,]
 SukhBaseLsk<-tbl_df(SukhBaseLsk)  #convert to dplyr tbl class
 SukBLskt<-gather(SukhBaseLsk, Year, LskPop, 3:63)   #tidy the data
-#BAserun Biomass
+# Baserun Biomass
 SukhBaseRmb<-SukhBase[3,]
 SukhBaseRmb<-tbl_df(SukhBaseRmb)  #convert to dplyr tbl class
 SukBRmbt<-gather(SukhBaseRmb, Year, Biomass, 3:63)   #tidy the data
@@ -304,9 +303,9 @@ SukB<-cbind(SukBGrasst, SukBLskt$LskPop, SukBRmbt$Biomass)
 colnames(SukB)[5:6]<- c("LskPop", "Biomass")
 
 ################################
-#Scenario 1
+# Scenario 1
 ################################
-#Scenario 1-Grass
+# Scenario 1-Grass
 
 SukS1G<- read.csv("SukS1Grass.csv", header=TRUE, check.names = FALSE)
 colnames(SukS1G)[1]<-"UF"      #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
@@ -316,7 +315,7 @@ SukS1G<-SukS1G[c(1,63,2:62)] #reorder the columns
 SukS1Gt<-tbl_df(SukS1G)  #convert to dplyr tbl class
 SukS1Gt<-gather(SukS1G, Year, GrassArea, 3:63)   #tidy the data
 
-#Scen1-Lsk
+# Scen1-Lsk
 SukS1L<- read.csv("SukS1Lsk.csv", header=TRUE, check.names = FALSE)
 colnames(SukS1L)[1]<-"UF"    #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
 SukS1L$UF<- c(0.75, 0.65, 0.55)  #rename the UFs steps used
@@ -325,7 +324,7 @@ SukS1L<-SukS1L[c(1,63,2:62)]     #reorder the columns
 SukS1Lt<-tbl_df(SukS1L)      #convert to dplyr tbl class
 SukS1Lt<-gather(SukS1L, Year, LskPop, 3:63)     #tidy the data
 
-#Scen1-Rmb
+# Scen1-Rmb
 SukS1B<- read.csv("SukS1Rmb.csv", header=TRUE, check.names = FALSE)
 colnames(SukS1B)[1]<-"UF"    #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
 SukS1B$UF<- c(0.75, 0.65, 0.55)  #rename the UFs steps used
@@ -334,16 +333,16 @@ SukS1B<-SukS1B[c(1,63,2:62)]     #reorder the columns
 SukS1Bt<-tbl_df(SukS1B)      #convert to dplyr tbl class
 SukS1Bt<-gather(SukS1B, Year, Biomass, 3:63)     #tidy the data
 
-#combine all Scen1 runs in to one df with a diff column for each var output
+# combine all Scen1 runs in to one df with a diff column for each var output
 
 SukS1<-cbind(SukS1Gt, SukS1Lt$LskPop, SukS1Bt$Biomass)
 colnames(SukS1)[5:6]<-c("LskPop", "Biomass")
 
 
 ################################
-#Scenario 2
+# Scenario 2
 ################################
-#Scenario 2-Grass
+# Scenario 2-Grass
 
 SukS2G<- read.csv("SukS2Grass.csv", header=TRUE, check.names = FALSE)
 colnames(SukS2G)[1]<-"UF"      #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
@@ -353,7 +352,7 @@ SukS2G<-SukS2G[c(1,63,2:62)] #reorder the columns
 SukS2Gt<-tbl_df(SukS2G)  #convert to dplyr tbl class
 SukS2Gt<-gather(SukS2G, Year, GrassArea, 3:63)   #tidy the data
 
-#Scen2-Lsk
+# Scen2-Lsk
 SukS2L<- read.csv("SukS2Lsk.csv", header=TRUE, check.names = FALSE)
 colnames(SukS2L)[1]<-"UF"    #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
 SukS2L$UF<- c(0.75, 0.65, 0.55)  #rename the UFs steps used
@@ -362,7 +361,7 @@ SukS2L<-SukS2L[c(1,63,2:62)]     #reorder the columns
 SukS2Lt<-tbl_df(SukS2L)      #convert to dplyr tbl class
 SukS2Lt<-gather(SukS2L, Year, LskPop, 3:63)     #tidy the data
 
-#Scen2-Rmb
+# Scen2-Rmb
 SukS2B<- read.csv("SukS2Rmb.csv", header=TRUE, check.names = FALSE)
 colnames(SukS2B)[1]<-"UF"    #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
 SukS2B$UF<- c(0.75, 0.65, 0.55)  #rename the UFs steps used
@@ -371,15 +370,15 @@ SukS2B<-SukS2B[c(1,63,2:62)]     #reorder the columns
 SukS2Bt<-tbl_df(SukS2B)      #convert to dplyr tbl class
 SukS2Bt<-gather(SukS2B, Year, Biomass, 3:63)     #tidy the data
 
-#combine all Scen1 runs in to one df with a diff column for each var output
+# combine all Scen1 runs in to one df with a diff column for each var output
 
 SukS2<-cbind(SukS2Gt, SukS2Lt$LskPop, SukS2Bt$Biomass)
 colnames(SukS2)[5:6]<-c("LskPop", "Biomass")
 
 ################################
-#Scenario 3
+# Scenario 3
 ################################
-#Scenario 3-Grass
+# Scenario 3-Grass
 
 SukS3G<- read.csv("SukS3Grass.csv", header=TRUE, check.names = FALSE)
 colnames(SukS3G)[1]<-"UF"      #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
@@ -389,7 +388,7 @@ SukS3G<-SukS3G[c(1,63,2:62)] #reorder the columns
 SukS3Gt<-tbl_df(SukS3G)  #convert to dplyr tbl class
 SukS3Gt<-gather(SukS3G, Year, GrassArea, 3:63)   #tidy the data
 
-#Scen3-Lsk
+# Scen3-Lsk
 SukS3L<- read.csv("SukS3Lsk.csv", header=TRUE, check.names = FALSE)
 colnames(SukS3L)[1]<-"UF"    #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
 SukS3L$UF<- c(0.75, 0.65, 0.55)  #rename the UFs steps used
@@ -398,7 +397,7 @@ SukS3L<-SukS3L[c(1,63,2:62)]     #reorder the columns
 SukS3Lt<-tbl_df(SukS3L)      #convert to dplyr tbl class
 SukS3Lt<-gather(SukS3L, Year, LskPop, 3:63)     #tidy the data
 
-#Scen3-Rmb
+# Scen3-Rmb
 SukS3B<- read.csv("SukS3Rmb.csv", header=TRUE, check.names = FALSE)
 colnames(SukS3B)[1]<-"UF"    #rename Urbanization Fraction Saturation Pt (Max Urban Pct)
 SukS3B$UF<- c(0.75, 0.65, 0.55)  #rename the UFs steps used
@@ -407,7 +406,7 @@ SukS3B<-SukS3B[c(1,63,2:62)]     #reorder the columns
 SukS3Bt<-tbl_df(SukS3B)      #convert to dplyr tbl class
 SukS3Bt<-gather(SukS3B, Year, Biomass, 3:63)     #tidy the data
 
-#combine all Scen1 runs in to one df with a diff column for each var output
+# combine all Scen1 runs in to one df with a diff column for each var output
 
 SukS3<-cbind(SukS3Gt, SukS3Lt$LskPop, SukS3Bt$Biomass)
 colnames(SukS3)[5:6]<-c("LskPop", "Biomass")
@@ -418,7 +417,7 @@ colnames(SukS3)[5:6]<-c("LskPop", "Biomass")
 
 Sukh_All<-bind_rows(SukB, SukS1, SukS2, SukS3)
 
-##inspect:
+## inspect:
 head(Sukh_All)
 tail(Sukh_All)
 nrow(Sukh_All)

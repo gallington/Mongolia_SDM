@@ -4,3 +4,10 @@ Allington, G.R.H., W. Li, and D.G. Brown. (2017) Urbanization and environmental 
 
 Model outpts from Vensim models are in the /data folder 
 Vensim model files in /vensim_model folder
+
+Step 1: data.prep.R
+Step 2: new.obs.exp.R
+Step 3: create subplots w UFfigs_for_pub.R
+Step 4: combine & export w/ fig4.R, fig5.R, fig6.R
+
+See manuscript for explanations of model structure and equations and individual Scenarios.

@@ -1,16 +1,19 @@
-#this is the new code to make the subplots which are then used in the subsequent files to create final figures 
-#for SDM manuscript Figures 4,5 and 6.  Figure 3 code is in - new.obs.expr.R
-#
-#after create subplots below plot final layouts in:
-#Fig. 4- fig4.R
-#Fig. 5- fig5.R
-#Fig. 6- fig6.R
+# CAUTION!! If import new runs make sure Hi/Med/Lo are labelled appropriately!
+# Old version of this code had levels labelled backwards!
 
-#CAUTION!! If import new runs make sure Hi/Med/Lo are labelled appropriately!
-#Old version of this code had levels labelled backwards!
-#NOTE:  Must run "data.prep.R" file first, 
-#with files from "Mongolia_SDM/data"
-#which are exported model projections from Vensim
+# NOTE:  Must run "data.prep.R" file first, 
+# with files from "Mongolia_SDM/data"
+# which are exported model projections from Vensim
+
+# this is the new code to make the subplots which are then used in the subsequent files to create final figures 
+# for SDM manuscript Figures 4,5 and 6.  Figure 3 code is in - new.obs.expr.R
+#
+# after create subplots below plot final layouts in:
+# Fig. 4- fig4.R
+# Fig. 5- fig5.R
+# Fig. 6- fig6.R
+
+
 
 # setwd("/nfs/gallington-data/Mongolia_SDM/")
 
@@ -22,11 +25,11 @@ library(dplyr)
 #~~~~~~~~~~~~~~XILINGOL~~~~~~~~~~~
 ##
 
-#This uses Xgl_All which was created in the data.prep.R file:
+# This uses Xgl_All which was created in the data.prep.R file:
 
 
-#Example subsetting code:
-#test to get just crop for s4, uf0.75
+# Example subsetting code:
+# test to get just crop for s4, uf0.75
 # xS46<-Xgl_All%>%
 #   filter(UF==0.75)%>%
 #   filter(Scenario=="Scen4")%>%

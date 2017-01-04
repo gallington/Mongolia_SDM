@@ -1,13 +1,13 @@
-#12/5 added new code to label subplots and create multiplot and export at high res
+# 12/5 added new code to label subplots and create multiplot and export at high res
 
 library(gridExtra)
 library(ggplot2)
 
-#Plotting observed v predicted values.
+# Plotting observed v predicted values.
 
 #setwd("../data")
 
-#this code has Mongolia first for some reason, don't get confused.
+# this code has Mongolia first for some reason, don't get confused.
 
 #------------
 #Sukhbaatar, Mongolia
@@ -131,36 +131,11 @@ xhoe<-
 # grid.arrange(xhoe, xloe, mhoe, mloe, ncol=2)
 
 #
-#to plot all together with teh legend on the bottom, 
-#use function code from: 
-#http://rpubs.com/sjackman/grid_arrange_shared_legend
+
 #
-library(ggplot2)
-library(gridExtra)
+
 library(grid)
 
-#function to combine plots and put legend at bottom:
-grid_arrange_shared_legend <- function(...) {
-  plots <- list(...)
-  g <- ggplotGrob(plots[[1]] + theme(legend.position="bottom"))$grobs
-  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-  lheight <- sum(legend$height)
-  grid.arrange(
-    do.call(arrangeGrob, lapply(plots, function(x)
-      x + theme(legend.position="none"))),
-    legend,
-    ncol = 1,
-    heights = unit.c(unit(1, "npc") - lheight, lheight))
-}
-#combine plots
-# grid_arrange_shared_legend(xhoe, xloe, mhoe, mloe, ncol=2, nrow=2)
-#assign to object
-# combo<- grid_arrange_shared_legend(xhoe, xloe, mhoe, mloe, ncol=2, nrow=2) #this won't save to ggsave
-#export
-# ggsave(combo, file="./plots/combined_plot2.png", height=6, width=6, dpi=300)
-
-#this doesn't use the call to put legend at bottom
-#g<- arrangeGrob(xhoe, xloe, mhoe, mloe, ncol=2) 
 
 ############################################
 
