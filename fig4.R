@@ -10,7 +10,7 @@
 # width, height: the width and the height of the plot
 # 
 # The function ggdraw() is used to initialize an empty drawing canvas.
-# install.packages("cowplot")
+#install.packages("cowplot")
 library(cowplot)
 
 # legend_scenarios <- get_legend(xg + theme(legend.position="bottom"))
